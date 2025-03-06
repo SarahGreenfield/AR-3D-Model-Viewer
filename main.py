@@ -1,12 +1,13 @@
 import cv2 #openCV Library imported
 import pyvista as pv #pyvista used for being able to display .obj files
-import vtk #another open-source library for 3D graphics. 
+import vtk #another open-source library for 3D graphics. necessary for stl files
 import open3d as o3d #importing open3D also
 
 #the function to get the object file
 def getObject():
     print()
-    myObject = o3d.data.ArmadilloMesh() #simply testing to ensure that the code will work
+    #myObject = o3d.data.ArmadilloMesh() #simply testing to ensure that the code will work
+    myObject = 'DeathStar.stl' #hard-coding the path here for now
     return myObject #so this variable can be used in other functions
 
 #enable camera
@@ -20,12 +21,14 @@ def userControls():
 #to display the object using TriangleMesh
 def displayObject(x):
     print()
-    mesh = o3d.io.read_triangle_mesh(x.path)
-    knotMesh = o3d.data.KnotMesh()
-    mesh = o3d.io.read_triangle_mesh(knotMesh.path)
-    print(mesh)
+    #if user is using .stl:
+
+    #else, use o3d
+    mesh = o3d.io.read_triangle_mesh(x)
+    #mesh = o3d.io.read_point_cloud("DeathStar.ply")s
     mesh.compute_vertex_normals() # more info on that
     o3d.visualization.draw_geometries([mesh])
+
     #print(mesh)
 
 
