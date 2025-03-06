@@ -7,7 +7,7 @@ import open3d as o3d #importing open3D also
 def getObject():
     print()
     #myObject = o3d.data.ArmadilloMesh() #simply testing to ensure that the code will work
-    myObject = 'DeathStar.stl' #hard-coding the path here for now
+    myObject = 'C:/Users/sarah/Desktop/3D_Models/Goat skull.ply' #hard-coding the path here for now
     return myObject #so this variable can be used in other functions
 
 #enable camera
