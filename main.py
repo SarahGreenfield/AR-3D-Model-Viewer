@@ -19,11 +19,11 @@ def getObject():
 
 #enable camera
 #function for the camera will be changed since the while loop is within this function
-def enableCamera():
+def enableCamera(x, y):
     print()
     #will be testing out OpenCV here and maybe have the camera background needed when displaying the 3d object
     #using the youtube tutorial as reference
-    camera = cv2.VideoCapture(0) #just accessing the webcam, not reading a video file
+    camera = cv2.VideoCapture(x) #just accessing the webcam, not reading a video file
     #if statement for if there is no camera connected
     if not camera.isOpened():
         print("No Camera Identified. Please check your connection with the webcam/camera.")
@@ -37,6 +37,7 @@ def enableCamera():
                 print("no more video")
                 break
         cv2.imshow("Object Viewer", frame)
+        
         if cv2.waitKey(1) == ord('x'):
             break
         
@@ -74,11 +75,14 @@ def main():
     print("Hello! Welcome to the 3D Object Viewer!")
    # print("Hello") #test if everything is running.
     print()
+    Link = input("Please Launch your IP Webcam app server on your mobile device and type in the link: ")
+    x = '/video'
+    newLink = Link + x
     userInput = input("Select what you want: (s to show, q to quit)")
     while userInput != 'q':  #while loop so the user can decide to view another object or exit    
         if userInput != 'q': #for now it is a specific key for now. Right now, displaying the 3D model is a success! Now to try my hand at OpenCV
             userObject = getObject()
-            #enableCamera()
+            enableCamera(newLink, userObject)
             #add the loop for the camera here and see what happens
             
             
