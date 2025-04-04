@@ -77,7 +77,8 @@ def main():
     print()
     Link = input("Please Launch your IP Webcam app server on your mobile device and type in the link: ")
     x = '/video'
-    newLink = Link + x
+    y = 'http://'
+    newLink = y + Link + x
     userInput = input("Select what you want: (s to show, q to quit)")
     while userInput != 'q':  #while loop so the user can decide to view another object or exit    
         if userInput != 'q': #for now it is a specific key for now. Right now, displaying the 3D model is a success! Now to try my hand at OpenCV
