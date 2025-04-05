@@ -36,7 +36,8 @@ def enableCamera(x, y):
         if not ret:
                 print("no more video")
                 break
-        cv2.imshow("Object Viewer", frame)
+        frameResized = cv2.resize(frame, (800,600))
+        cv2.imshow("Object Viewer", frameResized)
         
         if cv2.waitKey(1) == ord('x'):
             break
