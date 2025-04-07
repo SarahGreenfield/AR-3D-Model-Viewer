@@ -45,8 +45,8 @@ def calibrate(pics=True):
             cornersRefined = cv.cornerSubPix(imgGray,cornersOrg,(11,11),(-1,-1),termCriteria)
             imgPtsList.append(cornersRefined)
             if pics: #if true
-                cv.drawChessboardCorners(imgBGR, (Rows,Cols), cornersRefined, cornersFound)
-                cv.imshow('Image', imgBGR)
+                cv.drawChessboardCorners(imgBGR_resized, (Rows,Cols), cornersRefined, cornersFound)
+                cv.imshow('Image', imgBGR_resized)
                 cv.waitKey(500)
     cv.destroyAllWindows()
     
