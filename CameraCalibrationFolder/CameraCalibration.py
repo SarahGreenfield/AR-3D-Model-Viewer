@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 def calibrate(pics=True):
     #this is to read the images in the folder of ChessBoardPictures
     root = os.getcwd()
+    #for now going through still images (will use live video after the AR works)
     calibrationDir = os.path.join(root, 'ChessBoardPictures')
     imgPathList = glob.glob(os.path.join(calibrationDir, '*.jpg'))
     
