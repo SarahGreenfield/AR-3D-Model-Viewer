@@ -34,6 +34,7 @@ def calibrate(pics=True):
     #find the corners
     for curImgPath in imgPathList:
         imgBGR = cv.imread(curImgPath)
+        #imgBGR = cv.VideoCapture(0)
         imgGray = cv.cvtColor(imgBGR, cv.COLOR_BGR2GRAY)
         cornersFound, cornersOrg = cv.findChessboardCorners(imgGray,(Rows,Cols),None)
         
@@ -57,6 +58,14 @@ def calibrate(pics=True):
     #printing the values for the Camera Matrix and Reprojecting Errors
     print("Camera Matrix:\n",camMatrix)
     print("Reproj Error (pixels): {:.4f}".format(repError))
+    
+    #saving the Parameters for Pose Estimation:
+    curFolder = os.path.dirname(os.path.abspath(__file__))
+    paramPath = os.path.join(curFolder, "cal.npz") #saves it in a .npz file (no hardcoding here :))
+    np.savez(paramPath, repError=repError, camMatrix=camMatrix, distCoeff=distCoeff, rvecs=rvecs, tvecs=tvecs)
+    
+    #values to return
+    return camMatrix, distCoeff
         
 
 #runCalibration function
