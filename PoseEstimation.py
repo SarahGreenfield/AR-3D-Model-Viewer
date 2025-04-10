@@ -63,10 +63,10 @@ def drawObject(img, imgpts, faces):
     
     for face in faces:
             for i in range(len(face)):
-                cv.line(img, imgpts[face[i-1][0]-1], imgpts[face[i][0]-1], (0, 0, 255), 2)
-                #start_point = imgpts[face[i]]
-                #end_point = imgpts[face[(i+1) % len(face)]]
-                #img = cv.line(img, tuple(start_point), tuple(end_point), (0, 255, 0), 2)
+                #cv.line(img, imgpts[face[i-1][0]-1], imgpts[face[i][0]-1], (0, 0, 255), 2)
+                start_point = imgpts[face[i]]
+                end_point = imgpts[face[(i+1) % len(face)]]
+                img = cv.line(img, tuple(start_point), tuple(end_point), (0, 255, 0), 2)
     
     return img
 
@@ -106,40 +106,40 @@ def poseEstimation(option: DrawOption, objFilePath):
     
     while True:
     #find Corners, similar to CameraCalibration.py
-    #for curImgPath in imgPathList:
-        ret, imgBGR = cap.read()
+        for curImgPath in imgPathList:
+            ret, imgBGR = cap.read()
         
-        if not ret:
-            break
+            if not ret:
+                break
         
-        #imgBGR = cv.imread(curImgPath)
-        imgGray = cv.cvtColor(imgBGR, cv.COLOR_BGR2GRAY)
-        cornersFound, cornersOrg = cv.findChessboardCorners(imgGray, (Rows, Cols), None)
+            #imgBGR = cv.imread(curImgPath)
+            imgGray = cv.cvtColor(imgBGR, cv.COLOR_BGR2GRAY)
+            cornersFound, cornersOrg = cv.findChessboardCorners(imgGray, (Rows, Cols), None)
         
-        #to resize the view window so it is not bigger than the computer screen itself
-        imgBGR = cv.resize(imgBGR, (800,600))
+            #to resize the view window so it is not bigger than the computer screen itself
+            imgBGR = cv.resize(imgBGR, (800,600))
         
-        if cornersFound ==True:
-            cornersRefined = cv.cornerSubPix(imgGray, cornersOrg, (11,11), (-1,-1), termCriteria)
-            ret, rvecs, tvecs = cv.solvePnP(worldPtsCur, cornersRefined, camMatrix, distCoeff)
+            if cornersFound ==True:
+                cornersRefined = cv.cornerSubPix(imgGray, cornersOrg, (11,11), (-1,-1), termCriteria)
+                ret, rvecs, tvecs = cv.solvePnP(worldPtsCur, cornersRefined, camMatrix, distCoeff)
             
-            #have the different options depending on what the DrawOption is whether is it AXES, CUBE, or OBJECT
+                #have the different options depending on what the DrawOption is whether is it AXES, CUBE, or OBJECT
             
-            if option == DrawOption.AXES:
-                imgpts,_ = cv.projectPoints(axis,rvecs,tvecs,camMatrix,distCoeff)
-                imgBGR = drawAxes(imgBGR, cornersRefined, imgpts) #calling the drawAxes function defined above 
+                if option == DrawOption.AXES:
+                    imgpts,_ = cv.projectPoints(axis,rvecs,tvecs,camMatrix,distCoeff)
+                    imgBGR = drawAxes(imgBGR, cornersRefined, imgpts) #calling the drawAxes function defined above 
             
-            if option == DrawOption.CUBE:
-                imgpts,_ = cv.projectPoints(cubeCorners, rvecs, tvecs, camMatrix, distCoeff)
-                imgBGR = drawCube(imgBGR, imgpts)
+                if option == DrawOption.CUBE:
+                    imgpts,_ = cv.projectPoints(cubeCorners, rvecs, tvecs, camMatrix, distCoeff)
+                    imgBGR = drawCube(imgBGR, imgpts)
                 
-            if option == DrawOption.OBJECT:
-                imgpts, _ = cv.projectPoints(vertices, rvecs, tvecs, camMatrix, distCoeff)
-                imgBGR = drawObject(imgBGR, imgpts, faces)
+                if option == DrawOption.OBJECT:
+                    imgpts, _ = cv.projectPoints(vertices, rvecs, tvecs, camMatrix, distCoeff)
+                    imgBGR = drawObject(imgBGR, imgpts, faces)
                  
-        cv.imshow('AR', imgBGR)
+            cv.imshow('AR', imgBGR)
             
-            #cv.waitKey(1000)
+            #cv.waitKey(0)
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
         
@@ -147,13 +147,13 @@ def poseEstimation(option: DrawOption, objFilePath):
     cv.destroyAllWindows()
             
 if __name__== '__main__':
-    objFilePath = "C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj"
+    objFilePath = "C:/Users/sarah/Desktop/3D_Models/Hourglass.obj"
     #to draw the AXES
-    #poseEstimation(DrawOption.AXES) 
+    #poseEstimation(DrawOption.AXES, objFilePath) 
     
     #to draw the CUBE
-    poseEstimation(DrawOption.CUBE, objFilePath) 
+    #poseEstimation(DrawOption.CUBE, objFilePath) 
     
     #to draw the 3d object
     
-    #poseEstimation(DrawOption.OBJECT, objFilePath)
+    poseEstimation(DrawOption.OBJECT, objFilePath)
