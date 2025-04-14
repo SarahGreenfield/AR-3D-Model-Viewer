@@ -84,76 +84,76 @@ def poseEstimation(option: DrawOption):
                               [3,0,0], [0,0,-3], [0,3,-3], 
                               [3,3,-3], [3,0,-3]])
     
-    while True:
+    #while True:
     #find Corners, similar to CameraCalibration.py
-        for curImgPath in imgPathList:
-            ret, imgBGR = cap.read()
+    for curImgPath in imgPathList:
+            #ret, imgBGR = cap.read()
         
-            if not ret:
-                break
+            #if not ret:
+                #break
         
-            #imgBGR = cv.imread(curImgPath)
-            imgGray = cv.cvtColor(imgBGR, cv.COLOR_BGR2GRAY)
-            cornersFound, cornersOrg = cv.findChessboardCorners(imgGray, (Rows, Cols), None)
+        imgBGR = cv.imread(curImgPath)
+        imgGray = cv.cvtColor(imgBGR, cv.COLOR_BGR2GRAY)
+        cornersFound, cornersOrg = cv.findChessboardCorners(imgGray, (Rows, Cols), None)
         
             #to resize the view window so it is not bigger than the computer screen itself
-            imgBGR = cv.resize(imgBGR, (800,600))
+        imgBGR = cv.resize(imgBGR, (800,600))
         
-            if cornersFound ==True:
-                cornersRefined = cv.cornerSubPix(imgGray, cornersOrg, (11,11), (-1,-1), termCriteria)
-                ret, rvecs, tvecs = cv.solvePnP(worldPtsCur, cornersRefined, camMatrix, distCoeff)
+        if cornersFound ==True:
+            cornersRefined = cv.cornerSubPix(imgGray, cornersOrg, (11,11), (-1,-1), termCriteria)
+            ret, rvecs, tvecs = cv.solvePnP(worldPtsCur, cornersRefined, camMatrix, distCoeff)
             
                 #have the different options depending on what the DrawOption is whether is it AXES, CUBE, or OBJECT
             
-                if option == DrawOption.AXES:
-                    imgpts,_ = cv.projectPoints(axis,rvecs,tvecs,camMatrix,distCoeff)
-                    imgBGR = drawAxes(imgBGR, cornersRefined, imgpts) #calling the drawAxes function defined above 
+            if option == DrawOption.AXES:
+                imgpts,_ = cv.projectPoints(axis,rvecs,tvecs,camMatrix,distCoeff)
+                imgBGR = drawAxes(imgBGR, cornersRefined, imgpts) #calling the drawAxes function defined above 
             
-                if option == DrawOption.CUBE:
-                    imgpts,_ = cv.projectPoints(cubeCorners, rvecs, tvecs, camMatrix, distCoeff)
-                    imgBGR = drawCube(imgBGR, imgpts)
+            if option == DrawOption.CUBE:
+                imgpts,_ = cv.projectPoints(cubeCorners, rvecs, tvecs, camMatrix, distCoeff)
+                imgBGR = drawCube(imgBGR, imgpts)
                 
-                if option == DrawOption.OBJECT:
-                    mesh = trimesh.load("C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj")
+            if option == DrawOption.OBJECT:
+                mesh = trimesh.load("C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj")
                     
                     #honest: used ChatGpt to figure out an error from loading object as scene and not a trimesh object
                     #check to ensure the program will not break down
-                    if isinstance(mesh, trimesh.Trimesh):
-                        mesh = mesh
+                if isinstance(mesh, trimesh.Trimesh):
+                    mesh = mesh
                     
-                    elif isinstance(mesh, trimesh.Scene):
+                elif isinstance(mesh, trimesh.Scene):
                         #mesh = mesh.dump(concatenate=True) #using the .dump function to get rid of any scene object
                         #mesh = mesh.to_geometry()
-                        mesh = trimesh.util.concatenate(list(mesh.geometry.values())) #returns not a single mesh and then merges all meshes together
+                    mesh = trimesh.util.concatenate(list(mesh.geometry.values())) #returns not a single mesh and then merges all meshes together
                         
-                    else:
-                        raise ValueError("The object you are trying to load in the Augmented Reality feature is not compatible.")
+                else:
+                    raise ValueError("The object you are trying to load in the Augmented Reality feature is not compatible.")
                     
-                    vertices = np.array(mesh.vertices, dtype=np.float32)
+                vertices = np.array(mesh.vertices, dtype=np.float32)
                     
                     #imgpts, _ = cv.projectPoints(vertices, rvecs, tvecs, camMatrix, distCoeff)
                     #imgBGR = drawObject(imgBGR, imgpts, faces)
-                    projVertices, _ = cv.projectPoints(vertices, rvecs, tvecs, camMatrix, distCoeff)
+                projVertices, _ = cv.projectPoints(vertices, rvecs, tvecs, camMatrix, distCoeff)
                     
                     #extra step to avoid any errors that could crash the code
-                    if np.any(np.isnan(projVertices)):
-                        print("Skipping this as the 3D model you are trying to view contains values that are incorrect for this program.")
-                        continue
+                if np.any(np.isnan(projVertices)):
+                    print("Skipping this as the 3D model you are trying to view contains values that are incorrect for this program.")
+                    continue
                     
-                    projVertices = np.array(projVertices, dtype=np.int32).reshape(-1, 2)
+                projVertices = np.array(projVertices, dtype=np.int32).reshape(-1, 2)
                     
-                    for face in mesh.faces:
-                        v1, v2, v3 = projVertices[face[0]], projVertices[face[1]], projVertices[face[2]]
-                        cv.line(imgBGR, v1, v2, (0, 255, 0), 2)
-                        cv.line(imgBGR, v2, v3, (0, 255, 0), 2)
-                        cv.line(imgBGR, v3, v1, (0, 255, 0), 2)
+                for face in mesh.faces:
+                    v1, v2, v3 = projVertices[face[0]], projVertices[face[1]], projVertices[face[2]]
+                    cv.line(imgBGR, v1, v2, (0, 255, 0), 2)
+                    cv.line(imgBGR, v2, v3, (0, 255, 0), 2)
+                    cv.line(imgBGR, v3, v1, (0, 255, 0), 2)
                     
                  
-            cv.imshow('AR', imgBGR)
+        cv.imshow('AR', imgBGR)
             
-            #cv.waitKey(0)
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
+        cv.waitKey(0)
+        #if cv.waitKey(1) & 0xFF == ord('q'):
+         #   break
         
     cap.release()
     cv.destroyAllWindows()
@@ -169,5 +169,5 @@ def main():
     #to draw the 3d object
     
     poseEstimation(DrawOption.OBJECT)
-
+    
 main()
