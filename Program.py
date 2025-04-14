@@ -93,15 +93,17 @@ def main():
             print("Please ensure that the model you are going to view in AR is scaled down to show.")
             userFile = input("Enter the file path to your .obj file: ")
             #add the loop for the camera here and see what happens
-            query = input("see through video feed (simple objects work best for runtime) (v) or images (i): ")
-            if query == 'v':
-                AR2.showAR(userFile)
-            elif query == 'i':
-                AR_Image.ShowImage(userFile)
-                
-            else:
-                print("Invalid input. Please try again.")
-                continue
+            while userInput != 'q':
+                query = input("see through video feed (simple objects work best for runtime) (v) or images (i): ")
+                if query == 'v':
+                    AR2.showAR(userFile)
+                elif query == 'i':
+                    AR_Image.ShowImage(userFile)
+                elif query == 'q':
+                    break
+                else:
+                    print("Invalid input. Please try again.")
+                    continue
             #"C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj"
             
             #displayObject(userObject)
