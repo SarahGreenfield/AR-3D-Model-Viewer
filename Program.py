@@ -3,6 +3,11 @@ import pyvista as pv #pyvista used for being able to display .obj files
 import vtk #another open-source library for 3D graphics. necessary for stl files
 import open3d as o3d #importing open3D also
 
+#files to import
+import AR_Image
+import AR2
+
+
 WEBCAM = cv2.VideoCapture(0) #camera constant to be used in any function
 #user input path example: C:/Users/sarah/Desktop/3D_Models/DeathStar.stl
 
@@ -76,20 +81,30 @@ def main():
     print("Hello! Welcome to the 3D Object Viewer!")
    # print("Hello") #test if everything is running.
     print()
-    Link = input("Please Launch your IP Webcam app server on your mobile device and type in the link: ")
-    x = '/video'
-    y = 'http://'
-    newLink = y + Link + x
+    #Link = input("Please Launch your IP Webcam app server on your mobile device and type in the link: ")
+    #x = '/video'
+    #y = 'http://'
+    #newLink = y + Link + x
     userInput = input("Select what you want: (s to show, q to quit)")
     while userInput != 'q':  #while loop so the user can decide to view another object or exit    
         if userInput != 'q': #for now it is a specific key for now. Right now, displaying the 3D model is a success! Now to try my hand at OpenCV
-            userObject = getObject()
-            enableCamera(newLink, userObject)
+            #userObject = getObject()
+            #enableCamera(0, userObject)
+            print("Please ensure that the model you are going to view in AR is scaled down to show.")
+            userFile = input("Enter the file path to your .obj file: ")
             #add the loop for the camera here and see what happens
+            query = input("see through video feed (simple objects work best for runtime) (v) or images (i): ")
+            if query == 'v':
+                AR2.showAR(userFile)
+            elif query == 'i':
+                AR_Image.ShowImage(userFile)
+                
+            else:
+                print("Invalid input. Please try again.")
+                continue
+            #"C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj"
             
-            
-            
-            displayObject(userObject)
+            #displayObject(userObject)
         userInput = input("see another?: (q to quit)")
     
     print("thank you and have a nice day!")

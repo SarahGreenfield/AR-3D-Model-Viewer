@@ -54,7 +54,7 @@ def drawObject(img, imgpts):
 
 
 #main function for this file: Pose Estimation
-def poseEstimation(option: DrawOption):
+def poseEstimation(option: DrawOption, mesh):
     root = os.getcwd()
     #gets the parameters collected after camera calibration from the calibration folder
     paramPath = os.path.join(root, 'CameraCalibrationFolder/cal.npz')
@@ -114,7 +114,7 @@ def poseEstimation(option: DrawOption):
                     imgBGR = drawCube(imgBGR, imgpts)
                 
                 if option == DrawOption.OBJECT:
-                    mesh = trimesh.load("C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj")
+                    #mesh = trimesh.load("C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj")
                     
                     #honest: used ChatGpt to figure out an error from loading object as scene and not a trimesh object
                     #check to ensure the program will not break down
@@ -158,7 +158,7 @@ def poseEstimation(option: DrawOption):
     cap.release()
     cv.destroyAllWindows()
             
-def main():
+def showAR(x):
     #objFilePath = "C:/Users/sarah/Desktop/3D_Models/Hourglass.obj"
     #to draw the AXES
     #poseEstimation(DrawOption.AXES, objFilePath) 
@@ -167,7 +167,7 @@ def main():
     #poseEstimation(DrawOption.CUBE, objFilePath) 
     
     #to draw the 3d object
-    
-    poseEstimation(DrawOption.OBJECT)
+    mesh = trimesh.load(x) 
+    poseEstimation(DrawOption.OBJECT,mesh)
 
-main()
+#showAR()
