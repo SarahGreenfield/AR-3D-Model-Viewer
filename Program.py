@@ -24,7 +24,7 @@ def getObject():
 
 #enable camera
 #function for the camera will be changed since the while loop is within this function
-def enableCamera(x, y):
+def enableCamera(x):
     print()
     #will be testing out OpenCV here and maybe have the camera background needed when displaying the 3d object
     #using the youtube tutorial as reference
@@ -85,26 +85,39 @@ def main():
     #x = '/video'
     #y = 'http://'
     #newLink = y + Link + x
-    userInput = input("Select what you want: (s to show, q to quit)")
+    userInput = input("Select what you want: (s to view a 3D Object, c for camera, q to quit)")
     while userInput != 'q':  #while loop so the user can decide to view another object or exit    
         if userInput != 'q': #for now it is a specific key for now. Right now, displaying the 3D model is a success! Now to try my hand at OpenCV
             #userObject = getObject()
             #enableCamera(0, userObject)
-            print("Please ensure that the model you are going to view in AR is scaled down to show.")
-            userFile = input("Enter the file path to your .obj file: ")
-            #add the loop for the camera here and see what happens
-            while userInput != 'q':
-                query = input("see through video feed (simple objects work best for runtime) (v) or images (i): ")
-                if query == 'v':
-                    AR2.showAR(userFile)
-                elif query == 'i':
-                    AR_Image.ShowImage(userFile)
-                elif query == 'q':
-                    break
-                else:
-                    print("Invalid input. Please try again.")
-                    continue
+            if userInput == 's':
+                print("Please ensure that the model you are going to view in AR is scaled down to show.")
+                userFile = input("Enter the file path to your .obj file: ")
+                #add the loop for the camera here and see what happens
+                while userInput  != 'q':
+                    userInput = input("View virtually (v) or through AR (a)?: ")
+                    if userInput == 'v':
+                        displayObject(userFile)
+                    
+                    elif userInput == 'a':
+                        query = input("see through live video feed (simple objects work best for runtime) (v) or images (i): ")
+                        while query != 'q':
+                            if query == 'v':
+                                AR2.showAR(userFile)
+                            elif query == 'i':
+                                AR_Image.ShowImage(userFile)
+                
+                        else:
+                            print("Invalid input. Please try again.")
+                            continue
             #"C:/Users/sarah/Desktop/3D_Models/AlienAnimal.obj"
+            elif userInput == 'c':
+                print("Please open your IP Webcam app and launch your server")
+                userInput = input("Please enter the link to your IP Webcam server:")
+                x = 'http://'
+                y = '/video'
+                cam = x + userInput + y
+                enableCamera(cam)
             
             #displayObject(userObject)
         userInput = input("see another?: (q to quit)")
