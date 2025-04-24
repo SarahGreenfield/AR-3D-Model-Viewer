@@ -152,11 +152,10 @@ def poseEstimation(option: DrawOption, mesh):
             cv.imshow('AR', imgBGR)
             
             #cv.waitKey(0)
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-        
-    cap.release()
-    cv.destroyAllWindows()
+        if cv.waitKey(1) & 0xFF == ord('x'):
+            cap.release()
+            cv.destroyAllWindows()
+            return
             
 def showAR(x):
     #objFilePath = "C:/Users/sarah/Desktop/3D_Models/Hourglass.obj"
@@ -169,5 +168,6 @@ def showAR(x):
     #to draw the 3d object
     mesh = trimesh.load(x) 
     poseEstimation(DrawOption.OBJECT,mesh)
+    return 
 
 #showAR()
