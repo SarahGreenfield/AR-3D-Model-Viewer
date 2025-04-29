@@ -61,17 +61,17 @@ def displayObject(x):
     #if user is using .stl:
 
     #else, use o3d
-    '''
+    
     mesh = o3d.io.read_triangle_mesh(x)
     #mesh = o3d.io.read_point_cloud("DeathStar.ply")s
     mesh.compute_vertex_normals() # more info on that
-    o3d.visualization.draw_geometries([mesh])'''
+    o3d.visualization.draw_geometries([mesh])
     
     #print(mesh)
     #PyVista Code Here!
     
-    mesh = pv.read(x)
-    mesh.plot(background='black', show_edges=True) 
+    #mesh = pv.read(x)
+    #mesh.plot(background='grey', show_edges=True) 
     
 
 
